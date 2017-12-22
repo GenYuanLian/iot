@@ -3,11 +3,86 @@
 //Parse GPRMC NMEA sentence data from String
 //String must be GPRMC or no data will be parsed
 //Return Latitude
+String GPS::parseGprmcLat1(char* s){
+	int pLoc;
+	int lEndLoc;
+	int dEndLoc = 0;
+	int j=0;
+	String lat = "";
+	if(strstr(s,"GPRM")){
+		//Serial.println(s);
+		for(int i=0;i < 5; i++){
+			if(i<3){
+				for(;j<68;j++){
+					if(s[j]==','){
+						pLoc = j;
+						j++;
+						break;
+						Serial.println("pLoc finish");
+					}
+				}
+			}
+			if(i==3){
+				for(;j<68;j++){
+					if(s[j]==','){
+						lEndLoc=j;
+						break;
+					}
+				}
+			}
+		}
+		//Serial.print("pLoc:");
+		//Serial.println(pLoc);
+		//Serial.print("lEndLoc:");
+		//Serial.println(lEndLoc);
+		for(int k=pLoc+1;k<lEndLoc;k++)
+			lat += s[k];
+		return lat;
+	}
+}
+
+String GPS::parseGprmcLon1(char* s){
+	int pLoc;
+	int lEndLoc;
+	int dEndLoc = 0;
+	int j=0;
+	String lon = "";
+	if(strstr(s,"GPRM")){
+		//Serial.println(s);
+		for(int i=0;i < 7; i++){
+			if(i<5){
+				for(;j<68;j++){
+					if(s[j]==','){
+						pLoc = j;
+						j++;
+						break;
+						Serial.println("pLoc finish");
+					}
+				}
+			}
+			if(i==5){
+				for(;j<68;j++){
+					if(s[j]==','){
+						lEndLoc=j;
+						break;
+					}
+				}
+			}
+		}
+		for(int k=pLoc+1;k<lEndLoc;k++)
+			lon += s[k];
+		//Serial.print("lon:");
+		//Serial.println(lon);
+		return lon;
+	}
+}
 String GPS::parseGprmcLat(String s)
 {
+
   int pLoc = 0; //paramater location pointer
   int lEndLoc = 0; //lat parameter end location
   int dEndLoc = 0; //direction parameter end location
+  int j=0;
   String lat = "";
   /*make sure that we are parsing the GPRMC string. 
    Found that setting s.substring(0,5) == "GPRMC" caused a FALSE.
@@ -33,7 +108,7 @@ String GPS::parseGprmcLat(String s)
         for(int j= pLoc+1;j<lEndLoc;j++)
 			lat += s[j];
 		//lat = s.substring(pLoc+1, lEndLoc);
-        /*Serial.print("i = 3, pLoc: ");
+       /* Serial.print("i = 3, pLoc: ");
          Serial.println(pLoc);
          Serial.print("lEndLoc: ");
          Serial.println(lEndLoc);*/
